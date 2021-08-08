@@ -1,0 +1,121 @@
+﻿<!doctype html>
+<html>
+    <head>
+	    <meta charset="utf-8"/>
+		<style>
+		    body{
+			    margin:0;
+				padding:0;
+			}
+		</style>
+	</head>
+    <body>
+	    <canvas id='oCanvas'></canvas>
+		<script>
+		    var cxtElementNode=document.querySelector("#oCanvas");
+			cxtElementNode.width = window.innerWidth;
+			cxtElementNode.height = window.innerHeight;
+            var ctx=cxtElementNode.getContext("2d");
+			var parcitleNum = 80;
+			var randomPosition = [];
+			ctx.fillStyle = '#000000';
+			ctx.fillRect(0,0,cxtElementNode.width,cxtElementNode.height);
+			//设置+调用画球函数
+			for(var i = 0;i < parcitleNum;i++){
+			    randomPosition[i] = {};
+				randomPosition[i].Size = 2 + (Math.random()*2);
+				randomPosition[i].color = randomColor();
+			    randomPosition[i].X = Math.random()*cxtElementNode.width;
+				randomPosition[i].Y = Math.random()*cxtElementNode.height;
+				randomPosition[i].randomX = Math.random()*-1 + Math.random()*1;
+				randomPosition[i].randomY = Math.random()*-1 + Math.random()*1;
+			    createParcitle(randomPosition[i].X,randomPosition[i].Y);
+			}
+			//画和移动球
+			function parcitleDynamic(){
+			    ctx.fillStyle = 'rgba(0,0,0,0.2)';
+			    ctx.fillRect(0,0,cxtElementNode.width,cxtElementNode.height);
+			    for(var i = 0;i < parcitleNum;i++){
+				    if(randomPosition[i].X<0 || randomPosition[i].X>cxtElementNode.width){
+						randomPosition[i].randomX = -randomPosition[i].randomX;
+					}
+					if(randomPosition[i].Y<0 || randomPosition[i].Y>cxtElementNode.height){
+					    randomPosition[i].randomY = -randomPosition[i].randomY;
+					}
+			        randomPosition[i].X += randomPosition[i].randomX;
+			        randomPosition[i].Y += randomPosition[i].randomY;
+			        createParcitle(randomPosition[i].X,randomPosition[i].Y,randomPosition[i].Size,randomPosition[i].color);
+			    }
+			}
+			
+		    function createParcitle(randomX,randomY,randomSize,randomColor){
+			    ctx.beginPath();
+				ctx.fillStyle = randomColor;
+			    ctx.arc(randomX,randomY,randomSize,0,6.3,false);
+				ctx.fill();
+				ctx.closePath();
+			}
+			
+			function drawLine(){
+			    //先画球
+			    parcitleDynamic();
+				//判断距离是否连线
+				for(var i=0;i<parcitleNum;i++){
+				    for(var h=0;h<parcitleNum;h++){
+					    if(i != h){
+					        if(Math.sqrt(Math.pow((randomPosition[i].X-randomPosition[h].X),2) + Math.pow((randomPosition[i].Y-randomPosition[h].Y),2))<120){
+						        ctx.beginPath();
+						    	ctx.moveTo(randomPosition[i].X,randomPosition[i].Y);
+						    	ctx.lineTo(randomPosition[h].X,randomPosition[h].Y);
+								//渐变线条
+								//渐变路径
+								var canvasLinearGradient = ctx.createLinearGradient(randomPosition[i].X,randomPosition[i].Y,randomPosition[h].X,randomPosition[h].Y);
+								//渐变颜色
+								canvasLinearGradient.addColorStop(0,randomPosition[i].color);
+								canvasLinearGradient.addColorStop(1,randomPosition[h].color);
+						    	ctx.strokeStyle = canvasLinearGradient;
+								ctx.globalAlpha = 0.5;
+								ctx.lineWidth = 0.3 + randomPosition[i].Size * 0.12;
+						    	ctx.stroke();
+						    }
+						}
+					}
+				}
+				requestAnimationFrame(drawLine);
+			}
+			drawLine();
+			
+            //随机函数
+            function randomNum(m, n) {
+                return Math.floor(Math.random() * (n - m + 1) + m);
+            }
+		
+            //随机颜色
+            function randomColor() {
+                return "rgb(" + randomNum(0, 255) + "," + randomNum(0, 255) + "," + randomNum(0, 255) + ")";
+            }
+		    
+		    cxtElementNode.onmousemove = function(e){
+			    var ex = e.offsetX;
+				var ey = e.offsetY;
+				for(var i=0;i<parcitleNum;i++){
+				    if(Math.sqrt(Math.pow((randomPosition[i].X-ex),2) + Math.pow((randomPosition[i].Y-ey),2))<120){
+					    ctx.beginPath();
+					    ctx.moveTo(randomPosition[i].X,randomPosition[i].Y);
+					    ctx.lineTo(ex,ey);
+						//渐变线条
+						//渐变路径
+						var canvasLinearGradient = ctx.createLinearGradient(randomPosition[i].X,randomPosition[i].Y,ex,ey);
+						//渐变颜色
+						canvasLinearGradient.addColorStop(0,randomPosition[i].color);
+						canvasLinearGradient.addColorStop(1,randomColor());
+					    ctx.strokeStyle = canvasLinearGradient;
+						ctx.globalAlpha = 0.7;
+						ctx.lineWidth = 0.3 + randomPosition[i].Size * 0.12;
+					    ctx.stroke();
+					}
+				}
+		    }
+		</script>
+	</body>
+</html>

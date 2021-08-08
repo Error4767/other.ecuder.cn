@@ -1,0 +1,203 @@
+<!doctype html>
+<html>
+    <head>
+	    <meta charset = 'utf-8'>
+		<style>
+		    *{
+			    margin:0;
+				padding:0;
+			}
+			#control_3D{
+			    position:absolute;
+				top:300px;
+				left:300px;
+				transtion: all 3s linear;
+			    transform-style:preserve-3D;
+				perspective:20000px;
+			}
+			#control_3D .control_modular{
+			    position:absolute;
+			    width:72px;
+				height:72px;
+				background-color:#e0e0e0;
+				opacity:0.5;
+			    transform-style:preserve-3D;
+				transtion: all 3s linear;
+				perspective:20000px;
+				font-size:30px;
+				text-align:center;
+				vertical-align:center;
+				border:4px solid;
+				border-image:linear-gradient(blue,red,black) 10 10 10 10;
+			}
+			/*button effect*/
+			#control_3D .control_modular:hover{opacity:1;}
+			#control_3D .control_modular:active{}
+			/*rotate x*/
+			#control_3D .rotate_X .control_modular_x1{
+			    transform:translateZ(100px);
+			}
+			#control_3D .rotate_X .control_modular_x2{
+			    transform:rotateX(45deg) translateZ(100px);
+			}
+			#control_3D .rotate_X .control_modular_x3{
+			    transform:rotateX(90deg) translateZ(100px);
+			}
+			#control_3D .rotate_X .control_modular_x4{
+			    transform:rotateX(135deg) translateZ(100px);
+			}
+			#control_3D .rotate_X .control_modular_x5{
+			    transform:rotateX(180deg) translateZ(100px);
+			}
+			#control_3D .rotate_X .control_modular_x6{
+			    transform:rotateX(-45deg) translateZ(100px);
+			}
+			#control_3D .rotate_X .control_modular_x7{
+			    transform:rotateX(-90deg) translateZ(100px);
+			}
+			#control_3D .rotate_X .control_modular_x8{
+			    transform:rotateX(-135deg) translateZ(100px);
+			}
+			
+			/*rotate y*/
+			#control_3D .rotate_Y .control_modular_y1{
+			    transform:rotateY(45deg) translateZ(100px);
+			}
+			#control_3D .rotate_Y .control_modular_y2{
+			    transform:rotateY(90deg) translateZ(100px);
+			}
+			#control_3D .rotate_Y .control_modular_y3{
+			    transform:rotateY(135deg) translateZ(100px);
+			}
+			#control_3D .rotate_Y .control_modular_y4{
+			    transform:rotateY(-45deg) translateZ(100px);
+			}
+			#control_3D .rotate_Y .control_modular_y5{
+			    transform:rotateY(-90deg) translateZ(100px);
+			}
+			#control_3D .rotate_Y .control_modular_y6{
+			    transform:rotateY(-135deg) translateZ(100px);
+			}
+			/*rotate x y*/
+			#control_3D .rotate_XY .control_modular_xy1{
+			    transform:rotateX(90deg) rotateY(45deg) translateZ(100px);
+			}
+			#control_3D .rotate_XY .control_modular_xy2{
+			    transform:rotateX(90deg) rotateY(135deg) translateZ(100px);
+			}
+			#control_3D .rotate_XY .control_modular_xy3{
+			    transform:rotateX(90deg) rotateY(225deg) translateZ(100px);
+			}
+			#control_3D .rotate_XY .control_modular_xy4{
+			    transform:rotateX(90deg) rotateY(315deg) translateZ(100px);
+			}
+			/*triangle*/
+			/*on*/
+			#control_3D .triangle .control_modular_triangle1{
+			    clip-path:polygon(0% 100%,100% 100%,50% 12%);
+			    transform:rotateY(45deg) rotateX(36.5deg) translateZ(105px) translateY(-15px) translateX(0.5px);
+			}		
+			#control_3D .triangle .control_modular_triangle2{
+			    clip-path:polygon(0% 100%,100% 100%,50% 12%);
+			    transform:rotateY(135deg) rotateX(36.5deg)  translateZ(105px) translateY(-15px) translateX(0.5px);
+			}
+			#control_3D .triangle .control_modular_triangle3{
+			    clip-path:polygon(0% 100%,100% 100%,50% 12%);
+			    transform:rotateY(225deg) rotateX(36.5deg)  translateZ(105px) translateY(-15px) translateX(0.5px);
+			}
+			#control_3D .triangle .control_modular_triangle4{
+			    clip-path:polygon(0% 100%,100% 100%,50% 12%);
+			    transform:rotateY(315deg) rotateX(36.5deg)  translateZ(105px) translateY(-15px) translateX(0.5px);
+			}
+			/*under*/
+			#control_3D .triangle .control_modular_triangle5{
+			    clip-path:polygon(0% 0%,100% 0%,50% 88%);
+			    transform:rotateY(45deg) rotateX(-36.5deg)  translateZ(105px) translateY(15px) translateX(0.5px);
+			}
+			#control_3D .triangle .control_modular_triangle6{
+			    clip-path:polygon(0% 0%,100% 0%,50% 88%);
+			    transform:rotateY(135deg) rotateX(-36.5deg)  translateZ(105px) translateY(15px) translateX(0.5px);
+			}
+			#control_3D .triangle .control_modular_triangle7{
+			    clip-path:polygon(0% 0%,100% 0%,50% 88%);
+			    transform:rotateY(225deg) rotateX(-36.5deg)  translateZ(105px) translateY(15px) translateX(0.5px);
+			}
+			#control_3D .triangle .control_modular_triangle8{
+			    clip-path:polygon(0% 0%,100% 0%,50% 88%);
+			    transform:rotateY(315deg) rotateX(-36.5deg)  translateZ(105px) translateY(15px) translateX(0.5px);
+			}
+		</style>
+	</head>
+	<body>
+	    <div id='control_3D' ondragstart='false' >
+		    <div class='rotate_X'>
+		        <div class='control_modular_x1 control_modular'><a></a></div>
+			    <div class='control_modular_x2 control_modular'></div>
+			    <div class='control_modular_x3 control_modular'></div>
+			    <div class='control_modular_x4 control_modular'></div>
+			    <div class='control_modular_x5 control_modular'></div>
+			    <div class='control_modular_x6 control_modular'></div>
+			    <div class='control_modular_x7 control_modular'></div>
+			    <div class='control_modular_x8 control_modular'></div>
+			</div>
+			<div class='rotate_Y'>
+			    <div class='control_modular_y1 control_modular'></div>
+			    <div class='control_modular_y2 control_modular'></div>
+				<div class='control_modular_y3 control_modular'></div>
+				<div class='control_modular_y4 control_modular'></div>
+				<div class='control_modular_y5 control_modular'></div>
+				<div class='control_modular_y6 control_modular'></div>
+			</div>
+			<div class='rotate_XY'>
+			    <div class='control_modular_xy1 control_modular'></div>
+				<div class='control_modular_xy2 control_modular'></div>
+				<div class='control_modular_xy3 control_modular'></div>
+				<div class='control_modular_xy4 control_modular'></div>
+			</div>
+			<div class='triangle'>
+		        <div class='control_modular_triangle1 control_modular'></div>
+			    <div class='control_modular_triangle2 control_modular'></div>
+			    <div class='control_modular_triangle3 control_modular'></div>
+			    <div class='control_modular_triangle4 control_modular'></div>
+			    <div class='control_modular_triangle5 control_modular'></div>
+			    <div class='control_modular_triangle6 control_modular'></div>
+			    <div class='control_modular_triangle7 control_modular'></div>
+			    <div class='control_modular_triangle8 control_modular'></div>
+			</div>
+		</div>
+		<script>
+		    var rotateX = -20,
+		        rotateY = 0;
+		    document.onmousedown = function(e){
+		        console.log("鼠标按下");
+			    var preX = e.clientX,
+			        preY = e.clientY;
+			    this.onmousemove = function(e){
+			        
+				    var newX = e.clientX,
+				        newY = e.clientY;
+				    	
+				    	var minusX = newX - preX,
+				    	    minusY = newY - preY;//赋值下次用
+				    		
+				    	    rotateX = rotateX - minusY * 0.25,
+				    	    rotateY = rotateY + minusX * 0.25;
+				    		
+				    	//console.log(rotateX,rotateY);
+			    		
+			    		document.querySelector('#control_3D').style.transform = "rotateX("+rotateX+"deg)rotateY("+rotateY+"deg)";
+			    		
+			    		preX = e.clientX,
+			    		preY = e.clientY;
+			    		//console.log(minusX,minusY);
+			    }
+			    this.onmouseup = function(){
+			        this.onmousemove = null;
+			    }
+		    }
+			/*function mouseScroll(e){
+			    
+			}*/
+		</script>
+	</body>
+</html>

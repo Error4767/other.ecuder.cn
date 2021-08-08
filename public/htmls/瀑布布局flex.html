@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang='en'>
+
+<head>
+  <meta charset='utf-8'>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      width: 1000px;
+    }
+    * {
+      box-sizing: border-box;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      height: 1500px;
+    }
+
+    .container div {
+      position: relative;
+      counter-increment: item-counter;
+      width: 240px;
+      padding: 2px;
+      box-sizing: border-box;
+    }
+
+    .container div:nth-child(4n+1) {
+      order: 1;
+    }
+
+    .container div:nth-child(4n+2) {
+      order: 2;
+    }
+
+    .container div:nth-child(4n+3) {
+      order: 3;
+    }
+
+    .container div:nth-child(4n) {
+      order: 4;
+    }
+
+    .container img {
+      position: relative;
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .container div::after {
+      position: absolute;
+      display: block;
+      top: 2px;
+      left: 2px;
+      height: 24px;
+      width: 24px;
+      z-index: 100;
+      text-align: center;
+      color: white;
+      line-height: 24px;
+      background-color: #000;
+      content: counter(item-counter);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div>
+      <img src="https://source.unsplash.com/random?1" alt="">
+    </div>
+    <div>
+      <img src="https://source.unsplash.com/random?2" alt="">
+    </div>
+    <div>
+      <img src="https://source.unsplash.com/random?3" alt="">
+    </div>
+    <div>
+      <img src="https://source.unsplash.com/random?4" alt="">
+    </div>
+    <div>
+      <img src="https://source.unsplash.com/random?5" alt="">
+    </div>
+    <div>
+      <img src="https://source.unsplash.com/random?6" alt="">
+    </div>
+    <div>
+      <img src="https://source.unsplash.com/random?7" alt="">
+    </div>
+    <div>
+      <img src="https://source.unsplash.com/random?8" alt="">
+    </div>
+    <div>
+      <img src="https://source.unsplash.com/random?9" alt="">
+    </div>
+    <div>
+      <img src="https://source.unsplash.com/random?10" alt="">
+    </div>
+    <div>
+      <img src="https://source.unsplash.com/random?11" alt="">
+    </div>
+    <div>
+      <img src="https://source.unsplash.com/random?12" alt="">
+    </div>
+    <div>
+      <img src="https://source.unsplash.com/random?13" alt="">
+    </div>
+    <div>
+      <img src="https://source.unsplash.com/random?14" alt="">
+    </div>
+    <div>
+      <img src="https://source.unsplash.com/random?15" alt="">
+    </div>
+    <div>
+      <img src="https://source.unsplash.com/random?16" alt="">
+    </div>
+  </div>
+</body>
+
+</html>

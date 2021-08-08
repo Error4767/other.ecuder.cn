@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>计算段内每首曲子ACC (Malody .mc文件)</div>
+    <input type="file">
+    <div class="song-name"></div>
+    <div class="text"></div>
+    <script>
+        // 获取malody段位各个曲子的键数
+        const $input = document.querySelector("input");
+        const $songName = document.querySelector(".song-name");
+        const $text = document.querySelector(".text");
+
+        import("https://cdn.jsdelivr.net/npm/unstable/src/module/readFile.js")
+            .then(r => globalThis.readFileAsText = r.readFileAsText);
+
+        function getMalodySongsKeys(data, timeInterval = 15) {
+            let songStartPosition = data.note.reduce((res, v, i) => {
+                if (i === 0) {
+                    return res;
+                }
+                let pre = data.note[i - 1];
+                v.beat[0] - pre.beat[0] >= timeInterval && res.push(i);
+                return res;
+            }, [0]);
+            let songsKeys = songStartPosition.map((v, i, a) => {
+                if (i < a.length - 1) {
+                    return a[i + 1] - v;
+                } else {
+                    return data.note.length - v;
+                }
+            });
+            return songsKeys;
+        }
+        $input.onchange = () => {
+            const f = $input.files[0];
+            readFileAsText(f)
+                .then(r => {
+                    let data = JSON.parse(r);
+                    let songsKeys = getMalodySongsKeys(data);
+                    console.log(data);
+                    let input = prompt(`
+                    ${data.meta.version}
+                    请输入每首曲子结束后的ACC，使用/分隔`);
+                    let ACCs = input.split(/\//).map(v => Number(v));
+                    let singleSongACCs = ACCs.map((acc, i, arr) => {
+                        
+                        // 示例输入： 96.34/95.2/95.78/96.09
+                        // 其实是作者的EX5 ACC
+
+                        // 上一首结束的有效key数
+                        let preSongsValidKeys;
+                        if(i === 0) {
+                            preSongsValidKeys = 0;
+                        }else {
+                            preSongsValidKeys = songsKeys.slice(0, i).reduce((p, v) => p + v, 0) * (arr[i - 1] / 100);
+                        }
+
+                        // 这首结束的有效key数
+                        let songsValidKeys;
+                        if(i === arr.length - 1) {
+                            songsValidKeys = data.note.length * (acc / 100); 
+                        }else {
+                            // slice截取到目标之前，故+1
+                            songsValidKeys = songsKeys.slice(0, i + 1).reduce((p, v) => p + v, 0) * (acc / 100);
+                        }
+
+                        // 有效键数
+                        let validKeys = songsValidKeys - preSongsValidKeys;
+
+                        // 单曲acc
+                        let singleSongACC = (validKeys / songsKeys[i]);
+
+                        return singleSongACC;
+                    });
+
+                    let showACCs = singleSongACCs.map(v=> Number((v * 100).toFixed(2))); // 取二位小数
+
+                    $songName.textContent = data.meta.version;
+                    $text.textContent = "您的每首曲子ACC分别为: " + showACCs.join(" / ");
+                })
+                .catch(console.log);
+        };
+
+        // Ex5
+        [3230, 2732, 2562, 2110];
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,82 @@
+﻿<!doctype html>
+<html>
+    <head>
+	    <meta charset = 'utf-8'>
+		<style>
+		    *{
+			    margin:0;
+				padding:0;
+			}
+			.population{
+			    transform-style:preserve-3d;
+				perspective:2000px;
+			}
+			.div_3D{
+			    position:absolute;
+				color:red;
+				top:300px;
+				left:400px;
+				width:600px;
+				height:300px;
+				font-size:120px;
+				text-align:center;
+				vertical-align:middle;
+				transition:all 1s linear;
+				transform-style:preserve-3d;
+				background:linear-gradient(red,blue);
+				transform:rotateY(330deg);
+				perspective:2000px;
+			    -webkit-box-reflect: below -280px -webkit-linear-gradient(top,rgba(250,250,250,0),rgba(250,250,250,.0) 24%,rgba(250,250,250,0.4));
+			    box-reflect: below -280px -webkit-linear-gradient(top,rgba(250,250,250,0),rgba(250,250,250,.0) 24%,rgba(250,250,250,0.4));
+                -webkit-background-clip: text; 
+                -webkit-text-fill-color: transparent;  
+			}
+		</style>
+	</head>
+	<body>
+	    <div class='population'>
+	        <!--<div class='div_3D'>服务社会</div>-->
+		</div>
+		<script>
+		    var fragmentNodes = document.createDocumentFragment();
+			for(var i=0;i<30;i++){
+		        var box_3D = document.createElement('div');
+			    box_3D.className = 'div_3D';
+				box_3D.innerHTML = '为人民服务';
+				box_3D.style.transform = 'translateZ('+ i*1 +'px)';
+				fragmentNodes.appendChild(box_3D);
+			}
+			document.querySelector('.population').appendChild(fragmentNodes);
+			
+		    var rotateX = -20,
+		        rotateY = 0;
+		    document.onmousedown = function(e){
+		        console.log("鼠标按下");
+			    var preX = e.clientX,
+			        preY = e.clientY;
+			    this.onmousemove = function(e){
+			        
+				    var newX = e.clientX,
+				        newY = e.clientY;
+			    		
+				    	var minusX = newX - preX,
+				    	    minusY = newY - preY;//赋值下次用
+						
+				    	    rotateX = rotateX - minusY * 0.1,
+				    	    rotateY = rotateY + minusX * 0.1;
+				    		
+			    		//console.log(rotateX,rotateY);
+			    		
+			    		document.querySelector('.population').style.transform = "rotateX("+rotateX+"deg)rotateY("+rotateY+"deg)";
+			    		
+			    		preX = e.clientX,
+			    		preY = e.clientY;
+			    		//console.log(minusX,minusY);
+			    }
+			    this.onmouseup = function(){
+			        this.onmousemove = null;
+			    }
+		    }
+		</script>
+	</body>
+</html>
