@@ -16,8 +16,8 @@
 
   .box {
     font-size: 0;
-    width: 1600px;
-    height: 900px;
+    width: 1280px;
+    height: 720px;
     position: absolute;
     left: 50%;
     top: 50%;
@@ -45,7 +45,7 @@
 <body>
   <div class='box'></div>
   <script>
-    const imgs = [1, 2, 3, 4].map(v =>'https://source.unsplash.com/random/1920x1080?' + v + '.jpg');
+    const imgs = [1, 2, 3, 4].map(v =>'https://source.unsplash.com/random/1280x720?' + v + '.jpg');
     let zIndex = 99999;
     let index = 0;
     const $box = document.querySelector('.box');
@@ -84,7 +84,7 @@
         [...$childrens].forEach(e => {
           const str = `perspective(800px) rotateX(${Math.random() * 500 - 250}deg) rotateY(${Math.random() * 500 - 250}deg) translateX(${Math.random() * 500 - 250}px) translateY(${Math.random() * 500 - 250}px) translateZ(${Math.random() * 1000 - 500}px)`;
           e.style.transform = str;
-          console.log(e.style.transform, str);
+          // console.log(e.style.transform, str);
           e.style.opacity = 0;
         });
       }, 2000);
