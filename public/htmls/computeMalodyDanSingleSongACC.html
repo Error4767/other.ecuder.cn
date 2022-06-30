@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
+<!-- saved from url=(0064)https://other.ecuder.cn/htmls/computeMalodyDanSingleSongACC.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+    <title>计算段位单曲ACC</title>
+<style type="text/css">#_copy{align-items:center;background:#4494d5;border-radius:3px;color:#fff;cursor:pointer;display:flex;font-size:13px;height:30px;justify-content:center;position:absolute;width:60px;z-index:1000}#select-tooltip,#sfModal,.modal-backdrop,div[id^=reader-helper]{display:none!important}.modal-open{overflow:auto!important}._sf_adjust_body{padding-right:0!important}.super_copy_btns_div{position:fixed;width:154px;left:10px;top:45%;background:#e7f1ff;border:2px solid #4595d5;font-weight:600;border-radius:2px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;z-index:5000}.super_copy_btns_logo{width:100%;background:#4595d5;text-align:center;font-size:12px;color:#e7f1ff;line-height:30px;height:30px}.super_copy_btns_btn{display:block;width:128px;height:28px;background:#7f5711;border-radius:4px;color:#fff;font-size:12px;border:0;outline:0;margin:8px auto;font-weight:700;cursor:pointer;opacity:.9}.super_copy_btns_btn:hover{opacity:.8}.super_copy_btns_btn:active{opacity:1}</style></head>
 
-<body>
+<body _c_t_common="1" class="vsc-initialized" _c_t_j1="1">
     <div>计算段内每首曲子ACC (Malody .mc文件)</div>
     <input type="file">
     <div class="song-name"></div>
@@ -85,7 +84,11 @@
                     let showACCs = singleSongACCs.map(v=> Number((v * 100).toFixed(2))); // 取二位小数
 
                     $songName.textContent = data.meta.version;
-                    $text.textContent = "您的每首曲子ACC分别为: " + showACCs.join(" / ");
+                    $text.innerHTML = `
+                    <div>您的ACC变化: ${input.split("/").join(" / ")}</div>
+                    <div>您的每首曲子ACC分别为: ${showACCs.join(" / ")}</div>
+                    <div>每首曲子物量：${songsKeys.join(" / ")}</div>
+                    `;
                 })
                 .catch(console.log);
         };
@@ -93,6 +96,6 @@
         // Ex5
         [3230, 2732, 2562, 2110];
     </script>
-</body>
 
-</html>
+
+</body></html>
