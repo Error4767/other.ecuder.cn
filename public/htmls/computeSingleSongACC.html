@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>计算单曲ACC</title>
+    <style type="text/css">
+    </style>
+</head>
+
+<body _c_t_common="1" class="vsc-initialized" _c_t_j1="1">
+    <h2>计算单曲ACC</h2>
+    <div>正常情况下只需直接选取谱面文件，按要求输入各个ACC，然后点击计算即可</div>
+    <div>如果出现问题，建议自己调整间隔参数 [间隔参数是用于划分每一首曲子的时间间隔]，该工具使用间隔来划分每首单曲</div>
+    <br>
+    <hr>
+    <br>
+    <div>计算段内每首曲子ACC (Malody .mc文件)</div>
+    <div>
+        间隔数
+        <input class="interval" type="number" value="15">
+        具体代表时间不明，根据不同的谱面变化，默认为 15，（15参考时间5-7秒上下），这是个对Malody段位而言相对通用的值
+    </div>
+    <input class="input" type="file">
+    <div>
+        输入每首曲子结束后的ACC，使用 / 分隔
+        <input class="inputText" type="text">
+    </div>
+    <div>
+        <button class="compute">计算</button>
+    </div>
+    <div class="song-name"></div>
+    <div class="text"></div>
+    <br>
+    <hr>
+    <br>
+    <div>计算段内每首曲子ACC (osu!mania .osu文件)</div>
+    <div>
+        间隔毫秒数
+        <input class="interval2" type="number" value="4200">
+    </div>
+    <input class="input2" type="file">
+    <div>
+        输入每首曲子结束后的ACC，使用 / 分隔
+        <input class="inputText2" type="text">
+    </div>
+    <div>
+        <button class="compute2">计算</button>
+    </div>
+    <div class="song-name2"></div>
+    <div class="text2"></div>
+    <script>
+
+        import("https://cdn.jsdelivr.net/npm/unstable/src/module/readFile.js")
+            .then(r => globalThis.readFileAsText = r.readFileAsText);
+
+        // 数据对象和间隔，该间隔不是秒或者毫秒
+        function getMalodySongsKeys(data, timeInterval = 15) {
+            let songStartPosition = data.note.reduce((res, v, i) => {
+                if (i === 0) {
+                    return res;
+                }
+                let pre = data.note[i - 1];
+                v.beat[0] - pre.beat[0] >= timeInterval && res.push(i);
+                return res;
+            }, [0]);
+            let songsKeys = songStartPosition.map((v, i, a) => {
+                if (i < a.length - 1) {
+                    return a[i + 1] - v;
+                } else {
+                    return data.note.length - v;
+                }
+            });
+            return songsKeys;
+        }
+
+        // 数据字符和间隔毫秒数
+        function getOsuSongKeys(dataText, timeIntervalWithMillisecond = 4200) {
+            let songKeys = [];
+            let currentKeysNumber = 0;
+            let preTime = undefined;
+
+            dataText.split("[HitObjects]")[1].trim().split("\r\n").forEach(row => {
+                const [, , time, , , endPoint] = row.split(",");
+                // 如果不是，则是长条
+                if (endPoint !== "0:0:0:0:") {
+                    currentKeysNumber += 2;
+                } else {
+                    currentKeysNumber += 1;
+                }
+                // 大于一定时间毫秒视为另外一首
+                if (preTime && (time - preTime) > timeIntervalWithMillisecond) {
+                    songKeys.push(currentKeysNumber);
+                    currentKeysNumber = 0;
+                }
+                preTime = time;
+            });
+            songKeys.push(currentKeysNumber);
+            currentKeysNumber = 0;
+            return songKeys;
+        }
+
+        function getSingleSongACCs(songKeys, ACCs) {
+            let singleSongACCs = ACCs.map((acc, i, arr) => {
+
+                // 上一首结束的有效key数
+                let preSongsValidKeys;
+                if (i === 0) {
+                    preSongsValidKeys = 0;
+                } else {
+                    preSongsValidKeys = songKeys.slice(0, i).reduce((p, v) => p + v, 0) * (arr[i - 1] / 100);
+                }
+
+                // 这首结束的有效key数
+                let songsValidKeys;
+                if (i === arr.length - 1) {
+                    songsValidKeys = songKeys.reduce((p, v) => p + v) * (acc / 100);
+                } else {
+                    // slice截取到目标之前，故+1
+                    songsValidKeys = songKeys.slice(0, i + 1).reduce((p, v) => p + v, 0) * (acc / 100);
+                }
+
+                // 有效键数
+                let validKeys = songsValidKeys - preSongsValidKeys;
+
+                // 单曲acc
+                let singleSongACC = (validKeys / songKeys[i]);
+
+                return singleSongACC;
+            });
+
+            let showACCs = singleSongACCs.map(v => Number((v * 100).toFixed(2))); // 取二位小数
+            return showACCs;
+        }
+
+        // 生成展示HTMl
+        function generateShowInnerHTML(input, showACCs, songKeys) {
+            const allKeys = songKeys.reduce((p, v) => p + v);
+            return `
+                    <div>您的ACC变化: ${input.split("/").join(" / ")}</div>
+                    <div>您的每首曲子ACC分别为: ${showACCs.join(" / ")}</div>
+                    <div>每首曲子物量：${songKeys.join(" / ")}</div>
+                    <div>每首曲子物量占比：${songKeys.map(singleSongKeys => (((singleSongKeys / allKeys) * 100).toFixed(2) + "%")).join(" / ")}</div>
+                    `
+        }
+
+        const mustChoiceAMapFileText = "必须选择一个谱面文件";
+        const parseErrorText = "解析谱面文件失败";
+
+        // 获取malody段位各个曲子的键数
+        const $input = document.querySelector(".input");
+        const $songName = document.querySelector(".song-name");
+        const $text = document.querySelector(".text");
+        const $interval = document.querySelector(".interval");
+        const $inputText = document.querySelector(".inputText");
+        const $compute = document.querySelector(".compute");
+
+        $compute.onclick = () => {
+            const f = $input.files[0];
+            if (!f) {
+                alert(mustChoiceAMapFileText);
+                return;
+            }
+            readFileAsText(f)
+                .then(dataText => {
+                    try {
+                        let data = JSON.parse(dataText);
+                        let songKeys = getMalodySongsKeys(data, Number($interval.value));
+                        console.log(data);
+
+                        const input = $inputText.value;
+
+                        let ACCs = input.split(/\//).map(v => Number(v));
+
+                        const showACCs = getSingleSongACCs(songKeys, ACCs);
+
+                        const showHTML = generateShowInnerHTML(input, showACCs, songKeys);
+
+                        $text.innerHTML = showHTML;
+
+                        $songName.textContent = [data?.meta?.song?.title, data?.meta?.song?.artist, data?.meta?.version].filter(v => v).join(" - ");
+                    } catch (err) {
+                        alert(parseErrorText);
+                        console.log(err);
+                    }
+                })
+                .catch(console.log);
+        };
+
+        // 获取osu!mania段位各个曲子的键数
+        const $input2 = document.querySelector(".input2");
+        const $songName2 = document.querySelector(".song-name2");
+        const $text2 = document.querySelector(".text2");
+        const $interval2 = document.querySelector(".interval2");
+        const $inputText2 = document.querySelector(".inputText2");
+        const $compute2 = document.querySelector(".compute2");
+
+        $compute2.onclick = () => {
+            const f = $input2.files[0];
+            if (!f) {
+                alert(mustChoiceAMapFileText);
+                return;
+            }
+            readFileAsText(f)
+                .then(dataText => {
+                    try {
+                        let songKeys = getOsuSongKeys(dataText, Number($interval2.value));
+
+                        const input = $inputText2.value;
+
+                        let ACCs = input.split(/\//).map(v => Number(v));
+
+                        const showACCs = getSingleSongACCs(songKeys, ACCs);
+
+                        const showHTML = generateShowInnerHTML(input, showACCs, songKeys);
+
+                        $text2.innerHTML = showHTML;
+
+                        const metadata = {};
+                        dataText.split("[Metadata]")[1].split("[Difficulty]")[0].split("\r\n").filter(v=> v).map(row=> {
+                            const [key, value] = row.split(":");
+                            metadata[key] = value;
+                        });
+
+                        $songName2.textContent = [metadata?.Title, metadata?.Artist, metadata?.Version].filter(v => v).join(" - ");
+                    } catch (err) {
+                        alert(parseErrorText);
+                        console.log(err);
+                    }
+                })
+                .catch(console.log);
+        };
+    </script>
+
+
+</body>
+
+</html>
