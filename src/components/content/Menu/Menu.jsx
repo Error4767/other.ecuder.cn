@@ -61,7 +61,7 @@ export default function Menu(props) {
                 </p>
             <ul>
               <li>
-                <a onClick={()=> props.handler("/htmls/computeSingleSongACC.html")}>Malody 段位单曲 Acc 计算器</a>
+                <a onClick={()=> props.handler("/htmls/computeSingleSongACC.html")}>计算单曲ACC</a>
               </li>
             </ul>
           </li>
