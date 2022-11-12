@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .container {
+      box-sizing: border-box;
+      background-color: #ccc;
+      width: 300px;
+      height: 300px;
+      display: grid;
+      grid-gap: 5px 5px;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr 1fr;
+      align-items: center;
+      justify-items: center;
+      grid-template-areas: "item1 item2 item3"
+        "item8 button item4"
+        "item7 item6 item5"
+      ;
+    }
+
+    .item {
+      width: 80px;
+      height: 80px;
+
+      background-color: #fff;
+      box-sizing: border-box;
+      border-radius: 10%;
+      border: 1px solid #000;
+
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .item:nth-of-type(1) {
+      grid-area: item1;
+    }
+
+    .item:nth-of-type(2) {
+      grid-area: item2;
+    }
+
+    .item:nth-of-type(3) {
+      grid-area: item3;
+    }
+
+    .item:nth-of-type(4) {
+      grid-area: item4;
+    }
+
+    .item:nth-of-type(5) {
+      grid-area: item5;
+    }
+
+    .item:nth-of-type(6) {
+      grid-area: item6;
+    }
+
+    .item:nth-of-type(7) {
+      grid-area: item7;
+    }
+
+    .item:nth-of-type(8) {
+      grid-area: item8;
+    }
+
+    .button {
+      grid-area: button;
+      width: 80px;
+      height: 80px;
+
+      background-color: green;
+      box-sizing: border-box;
+      border-radius: 10%;
+      border: 1px solid #666;
+
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .button:hover {
+      background-color: #1a7;
+    }
+
+    .button:active {
+      background-color: #096;
+    }
+
+    /* 悬停样式 */
+    .stopping {
+      background-color: green;
+    }
+  </style>
+</head>
+
+<body>
+  <div class='container'>
+    <div class="item jiang">100元话费</div>
+    <div class="item"></div>
+    <div class="item jiang">50元话费</div>
+    <div class="item"></div>
+    <div class="item jiang">30元话费</div>
+    <div class="item"></div>
+    <div class="item jiang">5元话费</div>
+    <div class="item"></div>
+    <div class='button'>开始</div>
+  </div>
+  <script>
+    const $items = [...document.querySelectorAll(".item")];
+    const $button = document.querySelector(".button");
+
+    let isStarting = false;
+    let intervalTime = 0.5;
+
+    function toSecs(time) {
+      return time * 1000;
+    }
+
+    let cursor = 0;
+
+    function action() {
+      if (isStarting) {
+        if(intervalTime >=1) {
+          const index = cursor % 8;
+          $items[index].classList.add("stopping");
+          if($items[index].classList.contains("jiang")) {
+            cursor++;
+            setTimeout(()=> {
+              $items[index].classList.remove("stopping");
+              $items[index + 1].classList.add("stopping");
+            }, 1000);
+            setTimeout(()=> {
+              alert("很遗憾，没有中奖");
+            }, 1100);
+          }else {
+            setTimeout(()=> {
+              alert("很遗憾，没有中奖");
+            }, 100);
+          }
+          isStarting = false;
+          intervalTime = 0.5;
+          return;
+        }
+        console.log(intervalTime);
+        const index = cursor % 8;
+        $items[index].classList.add("stopping");
+        setTimeout(() => {
+          action();
+        }, toSecs(intervalTime))
+        setTimeout(() => {
+          $items[index].classList.remove("stopping");
+        }, toSecs(intervalTime));
+        cursor++;
+      }
+    }
+    
+    $button.onclick = () => {
+      if (!isStarting) {
+        $items.forEach(e=> e.classList.remove("stopping"));
+        intervalTime = 0.5;
+        isStarting = true;
+        new Array(6).fill(0).forEach((v, i) => {
+          setTimeout(() => {
+            intervalTime -= 0.07;
+          }, toSecs(i * 0.15));
+        });
+        new Array(12).fill(0).forEach((v, i) => {
+          setTimeout(() => {
+            intervalTime >= 1 && (intervalTime = 1);
+            intervalTime += 0.1;
+          }, toSecs(i * 0.25 + 3 + Math.random()*3));
+        });
+        action();
+      }
+    }
+  </script>
+</body>
+
+</html>

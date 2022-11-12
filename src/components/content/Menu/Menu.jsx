@@ -74,6 +74,9 @@ export default function Menu(props) {
               <li>
                 <a onClick={()=> props.handler("/htmls/瀑布布局flex.html")}>flex 瀑布流布局</a>
               </li>
+              <li>
+                <a onClick={()=> props.handler("/htmls/抽奖.html")}>抽奖示例</a>
+              </li>
             </ul>
           </li>
         </ul>
