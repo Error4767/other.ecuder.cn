@@ -53,9 +53,20 @@
     <div class="song-name2"></div>
     <div class="text2"></div>
     <script>
-
-        import("https://cdn.jsdelivr.net/npm/unstable/src/module/readFile.js")
-            .then(r => globalThis.readFileAsText = r.readFileAsText);
+        function readFileAsText(file){
+            if(file instanceof File) {
+                return new Promise((resolve,reject)=> {
+                    let fileReader = new FileReader();
+                    fileReader.readAsText(file);
+                    fileReader.onload = ()=> {
+                        resolve(fileReader.result);
+                    }
+                    fileReader.onerror = ()=> {
+                        reject(fileReader.error);
+                    }
+                });
+            }
+        }
 
         // 数据对象和间隔，该间隔不是秒或者毫秒
         function getMalodySongsKeys(data, timeInterval = 15) {
