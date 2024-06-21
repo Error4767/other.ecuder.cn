@@ -98,7 +98,8 @@
                 const [, , time, , , endPoint] = row.split(",");
                 // 如果不是，则是长条
                 if (endPoint !== "0:0:0:0:") {
-                    currentKeysNumber += 2;
+                    // osu长条也是1（score v1）
+                    currentKeysNumber += 1;
                 } else {
                     currentKeysNumber += 1;
                 }
