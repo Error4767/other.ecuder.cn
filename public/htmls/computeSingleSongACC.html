@@ -14,20 +14,20 @@
 <body _c_t_common="1" class="vsc-initialized" _c_t_j1="1">
     <h2>计算单曲ACC</h2>
     <div>正常情况下只需直接选取谱面文件，按要求输入各个ACC，然后点击计算即可</div>
-    <div>如果出现问题，建议自己调整间隔参数 [间隔参数是用于划分每一首曲子的时间间隔]，该工具使用间隔来划分每首单曲</div>
+    <div>如果出现问题，建议自己调整间隔参数（间隔参数是用于划分每一首曲子的时间间隔），该工具使用间隔来划分每首单曲</div>
     <br>
     <hr>
     <br>
-    <div>计算段内每首曲子ACC (Malody .mc文件)</div>
+    <div>计算每首曲子ACC (Malody .mc文件)</div>
     <div>
         间隔数
         <input class="interval" type="number" value="15">
-        具体代表时间不明，根据不同的谱面变化，默认为 15，（15参考时间5-7秒上下），这是个对Malody段位而言相对通用的值
+        具体代表时间不明，根据不同的谱面变化，默认为 15（15参考时间5-7秒上下），这是个对Malody段位而言相对通用的值
     </div>
     <input class="input" type="file">
     <div>
         输入每首曲子结束后的ACC，使用 / 分隔
-        <input class="inputText" type="text">
+        <input class="inputText" type="text" style="width: 50vw; min-width: 200px;">
     </div>
     <div>
         <button class="compute">计算</button>
@@ -37,7 +37,7 @@
     <br>
     <hr>
     <br>
-    <div>计算段内每首曲子ACC (osu!mania .osu文件)</div>
+    <div>计算每首曲子ACC (osu!mania .osu文件)</div>
     <div>
         间隔毫秒数
         <input class="interval2" type="number" value="4000">
@@ -45,7 +45,7 @@
     <input class="input2" type="file">
     <div>
         输入每首曲子结束后的ACC，使用 / 分隔
-        <input class="inputText2" type="text">
+        <input class="inputText2" type="text" style="width: 50vw; min-width: 200px;">
     </div>
     <div>
         <button class="compute2">计算</button>
